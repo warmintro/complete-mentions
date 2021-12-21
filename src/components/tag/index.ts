@@ -12,6 +12,10 @@ type RenderProps = {
   commit: Commit;
 };
 
+type MentionRef = {
+  reply: (m: Mention) => void;
+};
+
 type TagProps = {
   tag: string;
   renderText: RenderMention;
@@ -22,6 +26,7 @@ type TagProps = {
   onKeywordChange?: (keyword: string) => void;
   formatText?: (text: string) => string;
   extractCommit?: (commit: Commit) => void;
+  handleRef?: (ref: MentionRef) => void;
 };
 
 export default function Tag(props: TagProps): ReactElement | null {
@@ -35,6 +40,7 @@ export default function Tag(props: TagProps): ReactElement | null {
     extractString,
     formatText,
     extractCommit,
+    handleRef,
   } = props;
 
   const { mentionsHandler, input, inputRef, syncHandler } = useContext(MentionInputContext);
@@ -42,6 +48,16 @@ export default function Tag(props: TagProps): ReactElement | null {
   const [tracking, setTracking] = useState(false);
   const [keyword, setKeyword] = useState('');
   const trackingHandler = useTrackingHandler({ tag });
+
+  useEffect(() => {
+    if (handleRef) {
+      handleRef({
+        reply: ({ name, id }: Mention) => {
+          trackingHandler.commit({ text: '', name, id, formatText });
+        },
+      });
+    }
+  }, []);
 
   useEffect(() => {
     mentionsHandler.addRenderer({
