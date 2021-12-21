@@ -153,7 +153,7 @@ export default function createMentionsHandler() {
       mentions.forEach((mention, index) => {
         const last = index === mentions.length - 1;
         const { start, end } = mention;
-        const left = text.slice(prevEnd, start);
+        const left = text.slice(prevEnd + 1, start);
         prevEnd = end;
 
         const renderer = renderers[mention.tag];
@@ -180,14 +180,14 @@ export default function createMentionsHandler() {
       mentions.forEach((mention, index) => {
         const last = index === mentions.length - 1;
         const { start, end } = mention;
-        const left = text.slice(prevEnd, start);
+        const left = text.slice(prevEnd + 1, start);
         prevEnd = end;
 
         const extractor = extractors[mention.tag];
         result += left;
         result += extractor(mention);
         if (last) {
-          const right = text.slice(end);
+          const right = text.slice(end + 1);
           result += right;
         }
       });
