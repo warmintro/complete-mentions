@@ -161,7 +161,7 @@ export default function createMentionsHandler() {
         parts.push(left);
         parts.push(renderer(mention));
         if (last) {
-          const right = text.slice(end);
+          const right = text.slice(end + 1);
           parts.push(right);
         }
       });
