@@ -119,19 +119,20 @@ export default function createTrackingHandler(params: TrackingParams): TrackingH
   };
 
   const commit = ({ text, name, id, formatText }: CommitParam) => {
-    const left = text.slice(0, position);
-    const right = text.slice(position + keyword.length + 1);
+    const isEmpty = text.length === 0;
+    const left = !isEmpty ? text.slice(0, position) : '';
+    const right = !isEmpty ? text.slice(position + keyword.length + 1) : '';
     const slicedText = left + ' ' + right;
     const extractedName = formatText ? formatText(name) : name;
     const full = left + extractedName + ' ' + right;
     const result = {
-      keyword,
+      keyword: !isEmpty ? keyword : '',
       slicedText,
       name,
       id,
       text: full,
-      start: position,
-      end: position + name.length,
+      start: !isEmpty ? position : 0,
+      end: !isEmpty ? position + name.length : 0,
     };
 
     check();
