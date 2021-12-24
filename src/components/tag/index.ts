@@ -14,6 +14,7 @@ type RenderProps = {
 
 type MentionRef = {
   reply: (m: Mention) => void;
+  updateText: (t: string) => void;
 };
 
 type TagProps = {
@@ -54,6 +55,11 @@ export default function Tag(props: TagProps): ReactElement | null {
       handleRef({
         reply: ({ name, id }: Mention) => {
           trackingHandler.commit({ text: '', name, id, formatText });
+        },
+        updateText: text => {
+          syncHandler.updateSelection({ start: text.length, end: text.length + 1 });
+          syncHandler.updateSelection({ start: text.length, end: text.length + 1 });
+          syncHandler.updateText(text);
         },
       });
     }
